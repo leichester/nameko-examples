@@ -1,6 +1,6 @@
 # export local environment
 export AMQP_URI=amqp://guest:guest@localhost:5672
-export POSTGRES_URI=postgres://postgres:postgres@localhost:5432/orders
+export POSTGRES_URI=postgresql://postgres:postgres@localhost:5432/orders
 export REDIS_URI=redis://localhost:6379/dev
 
 # Check if rabbit is up and running before starting the service.
