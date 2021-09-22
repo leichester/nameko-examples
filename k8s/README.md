@@ -184,9 +184,9 @@ to learn about creating your own charts.
 To route traffic to our gateway service we'll be using ingress. For ingress to work `Ingress Controller` has to be enabled on our cluster. Follow instructions form [Ingress Installation docs](https://kubernetes.github.io/ingress-nginx/deploy/):
 
 ```sh
-$ kubectl --context=docker-desktop apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
+$ kubectl --context=docker-desktop apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/130af33510882ae62c89277f2ad0baca50e0fafe/deploy/static/mandatory.yaml
 
-$ kubectl --context=docker-desktop apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/cloud-generic.yaml
+$ kubectl --context=docker-desktop apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/130af33510882ae62c89277f2ad0baca50e0fafe/deploy/static/provider/cloud-generic.yaml
 ```
 
 Let's deploy our `products` chart:

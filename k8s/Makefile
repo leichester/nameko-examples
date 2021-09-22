@@ -1,6 +1,29 @@
-CONTEXT ?= docker-desktop
 NAMESPACE ?= examples
+CONTEXT ?= kind-$(NAMESPACE)
 TAG ?= latest
+
+kind-create-cluster:
+	kind create cluster --config kind-config.yaml --name $(NAMESPACE)
+	kind export kubeconfig --name $(NAMESPACE)
+	NEWURL=$$(kubectl config view | grep -B1 'name: $(CONTEXT)' | grep server: | awk '{print $$2}' | sed -e 's/0.0.0.0/$(HOST)/') ; \
+		kubectl config set-cluster $(CONTEXT) --server=$${NEWURL} --insecure-skip-tls-verify=true 
+
+kind-delete-cluster:
+	kind delete cluster --name $(NAMESPACE)
+
+# src: https://kind.sigs.k8s.io/docs/user/ingress/
+kind-setup-ingress:
+	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+	sleep 2
+	kubectl wait --namespace ingress-nginx \
+		--for=condition=ready pod \
+		--selector=app.kubernetes.io/component=controller \
+		--timeout=90s
+
+watch-svcs-pods:
+	watch -n 0 \
+	'kubectl --context=$(CONTEXT) --namespace $(NAMESPACE) get services -o wide; echo "---"; \
+	 kubectl --context=$(CONTEXT) --namespace $(NAMESPACE) get pods -o wide'
 
 deploy-namespace:
 	kubectl --context=$(CONTEXT) apply -f namespace.yaml
